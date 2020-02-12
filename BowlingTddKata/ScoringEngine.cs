@@ -10,14 +10,28 @@ namespace Bowling
 
     public class ScoringEngine
     {
-        public int ScoreRoll(int pinsKnocked)
+        private const int TotalPins = 10;
+
+        public int ScoreFrame(int roll1PinsKnocked, int? roll2PinsKnocked)
         {
-            if (pinsKnocked > 10)
+            var totalKnocked = roll1PinsKnocked + (roll2PinsKnocked ?? 0);
+
+            if (totalKnocked > TotalPins || (roll1PinsKnocked == 10 && roll2PinsKnocked != null))
             {
                 throw new InvalidOperationException();
             }
 
-            return pinsKnocked == 10 ? 30 : pinsKnocked;
+            if (roll1PinsKnocked == TotalPins)
+            {
+                return 30;
+            }
+
+            if (totalKnocked == TotalPins)
+            {
+                return TotalPins + roll1PinsKnocked;
+            }
+
+            return totalKnocked;
         }
     }
 }
