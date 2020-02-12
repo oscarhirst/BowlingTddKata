@@ -86,9 +86,46 @@ namespace Bowling.Tests
             Assert.AreEqual(roll1PinsKnocked + 10, _match.Score);
         }
 
+        [Test]
         public void Score_AtStartOfGame_Is0()
         {
             Assert.AreEqual(0, _match.Score);
+        }
+
+        [Test]
+        public void AddGame_GivenMoreThan10Frames_ThrowsInvalidOperationException()
+        {
+            Assert.Catch(typeof(InvalidOperationException), () =>
+            {
+                _match.AddGame(new (int, int?)[11] { (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), });
+            });
+        }
+
+        [Test]
+        public void AddGame_GivenLessThan10Frames_ThrowsInvalidOperationException()
+        {
+            Assert.Catch(typeof(InvalidOperationException), () =>
+            {
+                _match.AddGame(new (int, int?)[9] { (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), });
+            });
+        }
+
+        [Test]
+        public void Score_AfterGameOf1s_Is20()
+        {
+            var twoKnockedInTwoRolls = (1, 1);
+            _match.AddGame(new (int, int?)[10] { twoKnockedInTwoRolls, twoKnockedInTwoRolls, twoKnockedInTwoRolls, twoKnockedInTwoRolls, twoKnockedInTwoRolls, twoKnockedInTwoRolls, twoKnockedInTwoRolls, twoKnockedInTwoRolls, twoKnockedInTwoRolls, twoKnockedInTwoRolls, });
+
+            Assert.AreEqual(20, _match.Score);
+        }
+
+        [Test]
+        public void Score_AfterGameOfStrikes_Is300()
+        {
+            (int, int?) strike = (10, null);
+            _match.AddGame(new (int, int?)[10] { strike, strike, strike, strike, strike, strike, strike, strike, strike, strike, });
+
+            Assert.AreEqual(300, _match.Score);
         }
     }
 }

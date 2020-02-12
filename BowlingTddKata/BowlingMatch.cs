@@ -2,7 +2,7 @@
 // Copyright (c) Corsham Science. All rights reserved.
 // </copyright>
 // sln based on exercise http://www.peterprovost.org/blog/2012/05/02/kata-the-only-way-to-learn-tdd/
-// using World Bowling Scoring
+// using World Bowling Scoring https://en.wikipedia.org/wiki/Ten-pin_bowling#World_Bowling_scoring
 
 namespace Bowling
 {
@@ -21,6 +21,20 @@ namespace Bowling
 
         public void AddFrame(int roll1PinsKnocked, int? roll2PinsKnocked)
             => Score += ScoreFrame(roll1PinsKnocked, roll2PinsKnocked);
+
+        public void AddGame((int, int?)[] frames)
+        {
+            if (frames.Length != 10)
+            {
+                throw new InvalidOperationException();
+            }
+
+            foreach (var frame in frames)
+            {
+                var (roll1, roll2) = frame;
+                AddFrame(roll1, roll2);
+            }
+        }
 
         private int ScoreFrame(int roll1PinsKnocked, int? roll2PinsKnocked)
         {
