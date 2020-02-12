@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29721.120
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bowling", "BowlingTddKata\Bowling.csproj", "{0BB8D98D-029D-493A-84C4-ECACDF7FE0B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bowling", "Bowling\Bowling.csproj", "{0BB8D98D-029D-493A-84C4-ECACDF7FE0B9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bowling.Tests", "BowlingTests\Bowling.Tests.csproj", "{B24F62DC-1499-4E18-BDF7-51F3BC28CCAA}"
 EndProject

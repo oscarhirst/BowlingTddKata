@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BowlingTddKata\Bowling.csproj" />
+    <ProjectReference Include="..\Bowling\Bowling.csproj" />
   </ItemGroup>
 
 </Project>
