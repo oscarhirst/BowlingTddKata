@@ -11,51 +11,84 @@ namespace Bowling
     public class BowlingMatch
     {
         private const int TotalPins = 10;
+        private int? _pinsKnockedInFirstRoll;
 
         public BowlingMatch()
         {
             Score = 0;
+            _pinsKnockedInFirstRoll = null;
         }
 
         public int Score { get; private set; }
 
-        public void AddFrame(int roll1PinsKnocked, int? roll2PinsKnocked)
-            => Score += ScoreFrame(roll1PinsKnocked, roll2PinsKnocked);
-
-        public void AddGame((int, int?)[] frames)
+        public void AddGame(int?[] rolls)
         {
-            if (frames.Length != 10)
+            if (rolls.Length != 20)
             {
                 throw new InvalidOperationException();
             }
 
-            foreach (var frame in frames)
+            foreach (var roll in rolls)
             {
-                var (roll1, roll2) = frame;
-                AddFrame(roll1, roll2);
+                AddRoll(roll);
             }
         }
 
-        private int ScoreFrame(int roll1PinsKnocked, int? roll2PinsKnocked)
+        public void AddRoll(int? pinsKnocked)
         {
-            var totalKnocked = roll1PinsKnocked + (roll2PinsKnocked ?? 0);
+            if (pinsKnocked != null)
+            {
+                if (pinsKnocked < 0 || pinsKnocked > TotalPins)
+                {
+                    throw new InvalidOperationException();
+                }
 
-            if (totalKnocked > TotalPins || (roll1PinsKnocked == 10 && roll2PinsKnocked != null))
+                if (_pinsKnockedInFirstRoll == null)
+                {
+                    if (pinsKnocked == TotalPins)
+                    {
+                        AddFrame(pinsKnocked.Value, null);
+                        return;
+                    }
+
+                    Score += pinsKnocked.Value;
+                    _pinsKnockedInFirstRoll = pinsKnocked;
+                    return;
+                }
+
+                Score -= _pinsKnockedInFirstRoll.Value;
+
+                AddFrame(_pinsKnockedInFirstRoll.Value, pinsKnocked);
+            }
+        }
+
+        private void AddFrame(int roll1PinsKnocked, int? roll2PinsKnocked)
+        {
+            if (roll1PinsKnocked == 10 && roll2PinsKnocked != null)
             {
                 throw new InvalidOperationException();
             }
 
-            if (roll1PinsKnocked == TotalPins)
+            var totalKnocked = roll1PinsKnocked + (roll2PinsKnocked ?? 0);
+            if (totalKnocked > TotalPins)
             {
-                return 30;
+                throw new InvalidOperationException();
             }
 
-            if (totalKnocked == TotalPins)
+            if (roll1PinsKnocked == TotalPins || roll2PinsKnocked == TotalPins)
             {
-                return TotalPins + roll1PinsKnocked;
+                Score += 30;
+            }
+            else if (totalKnocked == TotalPins)
+            {
+                Score += TotalPins + roll1PinsKnocked;
+            }
+            else
+            {
+                Score += totalKnocked;
             }
 
-            return totalKnocked;
+            _pinsKnockedInFirstRoll = null;
         }
     }
 }
